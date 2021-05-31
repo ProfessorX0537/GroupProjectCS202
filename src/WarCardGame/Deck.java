@@ -68,6 +68,11 @@ public class Deck {
             int change = i + rand.nextInt(length - i); // gets a random value in arrayList
             swap(a, i, change);
         }
+
+        for (int i = 0; i < length; i++) { // fills deck stack up with the now shuffled values
+            deck.push(a.get(i)); // since it is non primitive we shouldn't have to return value
+                                 // for deck stack passed in to be shuffled in game loop further testing required.
+        }
     }
 
     public static void swap(ArrayList<String> a, int i, int change) {
