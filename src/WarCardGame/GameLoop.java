@@ -119,4 +119,9 @@ public class GameLoop {
             }
         }
     }
+
+    // GAME LOOP MAY NEED TO BE ITS OWN METHOD UNSURE FOR NOW
+    public static void GameLoop(Stack<String> Deck1, Stack<String> Deck2) { //
+
+    }
 }
