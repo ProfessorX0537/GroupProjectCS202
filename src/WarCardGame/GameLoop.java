@@ -25,6 +25,7 @@ public class GameLoop {
         Deck mainDeck = new Deck();
         mainDeck.printStack();
         mainDeck.shuffle();
+        //mainDeck.shuffleDeck();
         mainDeck.printStack();
         System.out.println();
 

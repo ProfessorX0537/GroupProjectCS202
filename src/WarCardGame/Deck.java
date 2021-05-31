@@ -50,9 +50,30 @@ public class Deck {
         for (String word: tempStack) {  //REINTIALIZING MAIN DECK
             deckStack.push(word);
         }
+    }
 
+    //TODO- Need to implement this shuffle method to stop using collections.shuffle
+    // these two methods act to shuffle and array.
+    // fill array with stack values then shuffle array and then
+    // fill back into stack and return
+    public static void shuffleDeck(Stack<String> deck) {
+        ArrayList<String> a = new ArrayList<>();
+        Random rand = new Random();
+        rand.nextInt();
+        while(!deck.isEmpty()) { // fills array list with the values in the stack passed to it
+            a.add(deck.pop());
+        }
+        int length = a.size(); // collects size of ArrayList
+        for (int i = 0; i < length; i++) {
+            int change = i + rand.nextInt(length - i); // gets a random value in arrayList
+            swap(a, i, change);
+        }
+    }
 
-
+    public static void swap(ArrayList<String> a, int i, int change) {
+        String temp = a.get(i); // collects temp value at i index
+        a.set(i, a.get(change)); // sets index i to the random string at index change
+        a.set(change, temp); // sets the change value to the temp index
     }
 
 
