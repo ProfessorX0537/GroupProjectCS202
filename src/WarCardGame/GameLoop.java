@@ -37,7 +37,7 @@ public class GameLoop {
         //CREATING STACKS FOR PLAYERS
         Stack<String> player1deck = new Stack<>();
         Stack<String> player2deck = new Stack<>();
-        System.out.println("I am adding this here :)");
+        System.out.println();
 
         //Splitting Decks
         mainDeck.splitDeck(player1deck, player2deck);
