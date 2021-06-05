@@ -84,7 +84,9 @@ public class GameLoop {
                     player2deck.push(player2discard.pop());
                 }
             }
-            System.out.println(player1deck.size() + player2deck.size() + player1discard.size() + player2discard.size() + "should always be 52");
+            System.out.println(player1deck.size() + player2deck.size() + player1discard.size() + player2discard.size() + "should always be 52"); // for debugging
+
+
             System.out.println("Enter \"Flip\" to play a card for the round");
             String userInput = scnr.next();
             if (userInput.equalsIgnoreCase("Flip")) {
@@ -111,7 +113,14 @@ public class GameLoop {
 
     public static boolean gamesLoop(Stack<String> player1deck, Stack<String> player2deck, Stack<String> player1discard,
                                 Stack<String> player2discard, HashMap<String, Integer> CardMap, Deck mainDeck) { //
-
+        if (player2deck.isEmpty()) { // checks to see if the player has won
+            System.out.println("Player 1 has won the game, they have acquired all 52 cards");
+            return true; // wins game
+        }
+        if (player1deck.isEmpty()) { // checks to see if the player has won
+            System.out.println("Player 2 has won the game, they have acquired all 52 cards");
+            return true; // wins game
+        }
             int flipP1 = CardMap.get(player1deck.peek()); // collects value of top card according to the map and stores it in for player 1
             int flipP2 = CardMap.get(player2deck.peek()); // collects value of top card according to the map and stores it in for player 2
             String P1card = player1deck.pop(); // takes top card off of player 1's stack and stores it
@@ -123,10 +132,7 @@ public class GameLoop {
                 System.out.println(P1card + " and " + P2card + " goes to Player 1's discard!");
                 player1discard.push(P1card); // puts both cards from the round into the winning players
                 player1discard.push(P2card); // discard stack for later
-                if (player1deck.isEmpty()) { // checks to see if the player has won
-                    System.out.println("Player 1 has won the game, they have acquired all 52 cards");
-                    return true; // wins game
-                }
+
                 System.out.println(player1discard); //to make sure that cards entering discard
 
             } else if (flipP1 < flipP2) { // checks if player 2's card is greater
@@ -135,10 +141,7 @@ public class GameLoop {
                 System.out.println(P1card + " and " + P2card + " goes to Player 2's discard!");
                 player2discard.push(P1card); // puts both cards from the round into the winning players
                 player2discard.push(P2card); // discard stack for later
-                if (player2deck.isEmpty()) { // checks to see if the player has won
-                    System.out.println("Player 2 has won the game, they have acquired all 52 cards");
-                    return true; // wins game
-                }
+
                 System.out.println(player2discard); //to make sure that cards entering discard
             } else { // this means that the cards were the same value
                 System.out.println("tie place holder  add both cards and give to p1");
