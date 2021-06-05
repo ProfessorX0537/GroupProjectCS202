@@ -56,23 +56,26 @@ public class Deck {
     // these two methods act to shuffle and array.
     // fill array with stack values then shuffle array and then
     // fill back into stack and return
-    public static void shuffleDeck(Stack<String> deck) {
+    public void shuffleDeck(Stack<String> deck) {
         ArrayList<String> a = new ArrayList<>();
         Random rand = new Random();
         rand.nextInt();
+        System.out.println(deck.size());
         while(!deck.isEmpty()) { // fills array list with the values in the stack passed to it
-            a.add(deck.pop());
+         a.add(deck.pop());
         }
+        System.out.println(a.size());
         int length = a.size(); // collects size of ArrayList
         for (int i = 0; i < length; i++) {
             int change = i + rand.nextInt(length - i); // gets a random value in arrayList
             swap(a, i, change);
         }
-
+        System.out.println(a.size());
         for (int i = 0; i < length; i++) { // fills deck stack up with the now shuffled values
             deck.push(a.get(i)); // since it is non primitive we shouldn't have to return value
                                  // for deck stack passed in to be shuffled in game loop further testing required.
         }
+        System.out.println(deck.size());
     }
 
     public static void swap(ArrayList<String> a, int i, int change) {
