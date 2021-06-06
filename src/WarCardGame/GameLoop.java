@@ -86,6 +86,7 @@ public class GameLoop {
             }
             System.out.println(player1deck.size() + player2deck.size() + player1discard.size() + player2discard.size() + "should always be 52"); // for debugging
 
+            // TODO- if misspelled flip will run the game loop twice when spelling it correctly
 
             System.out.println("Enter \"Flip\" to play a card for the round");
             String userInput = scnr.next();
@@ -144,15 +145,39 @@ public class GameLoop {
 
                 System.out.println(player2discard); //to make sure that cards entering discard
             } else { // this means that the cards were the same value
-                System.out.println("tie place holder  add both cards and give to p1");
-                player1discard.push(P1card);
-                player2discard.push(P2card);
+                ArrayList <String> a = new ArrayList<>(); // initialize arraylist
+                a.add(P1card); //input current tied cards
+                a.add(P2card);
 
-                //TODO - create tie rules
-                // probably needs two temp stacks to hold extra cards
-                // flip 3 cards the 3rd card decides who wins the "war"
-                // winning player collects all cards flipped. go to discard stack
-                // ALSO TIES CURRENTLY EAT THE CARDS
+                if (player1deck.size() < 3) { // has to have at least 3 cards to perform tie operation.
+                    System.out.println("shuffling discard d1");
+                    mainDeck.shuffleDeck(player1discard);
+                    while(!player1discard.isEmpty()) {
+                        player1deck.push(player1discard.pop());
+                    }
+                }
+                if (player2deck.size() < 3) { // has to have at least 3 cards to perform tie operation.
+                    System.out.println("shuffling discard d2");
+                    mainDeck.shuffleDeck(player2discard);
+                    while(!player2discard.isEmpty()) {
+                        player2deck.push(player2discard.pop());
+                    }
+                }
+
+                for (int i = 0; i < 3; i++) { // flips three cards from each deck into Array
+                    a.add(player1deck.pop());
+                    a.add(player2deck.pop());
+                }
+
+                if (CardMap.get(a.get(a.size() - 1)) > CardMap.get(a.get(a.size() - 2))) { // if P2 card is greater than P1
+                    for (int i = 0; i < a.size(); i++) {
+                        player2discard.push(a.get(i));
+                    }
+                } else { // player one wins tie
+                    for (int i = 0; i < a.size(); i++) {
+                        player1discard.push(a.get(i));
+                    }
+                }
             }
         return false;
     }

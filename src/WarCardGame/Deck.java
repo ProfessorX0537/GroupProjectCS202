@@ -52,10 +52,6 @@ public class Deck {
         }
     }
 
-    //TODO- Need to implement this shuffle method to stop using collections.shuffle
-    // these two methods act to shuffle and array.
-    // fill array with stack values then shuffle array and then
-    // fill back into stack and return
     public void shuffleDeck(Stack<String> deck) {
         ArrayList<String> a = new ArrayList<>();
         Random rand = new Random();
