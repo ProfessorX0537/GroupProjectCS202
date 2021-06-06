@@ -19,21 +19,17 @@ public class GameLoop {
             }
             i++;
         }
-        //test cases ignore
-//        System.out.println(CardMap.get("5 of Diamonds"));
-//        System.out.println(CardMap.get("King of Spades"));
 
         //CHECKING DECKS
         Deck mainDeck = new Deck();
-        mainDeck.printStack();
+        // mainDeck.printStack(); // TAKEN OUT FOR CLEAN UP
         mainDeck.shuffle();
-        //mainDeck.shuffleDeck();
-        mainDeck.printStack();
-        System.out.println();
+        // mainDeck.printStack();
+        System.out.println(); // TAKEN OUT FOR CLEAN UP
 
         //GET THE SIZE OF MAIN DECK OR STACK
-        System.out.println("Size of Main Deck " + mainDeck.getSize());
-        System.out.println();
+//        System.out.println("Size of Main Deck " + mainDeck.getSize()); // TAKEN OUT FOR CLEAN UP
+//        System.out.println(); // TAKEN OUT FOR CLEAN UP
 
 
         //CREATING STACKS FOR PLAYERS
@@ -46,15 +42,15 @@ public class GameLoop {
         System.out.println("Splitting Decks \n");
 
         //PRINTING THE STACKS OF EACH PLAYER
-        System.out.println("THE STACKS OF EACH PLAYER");
-        System.out.println("Player One (Size " + player1deck.size() + " ) " + player1deck);
-        System.out.println("Player Two (Size " + player1deck.size() + " ) " + player2deck);
-        System.out.println();
+//        System.out.println("THE STACKS OF EACH PLAYER"); // TAKEN OUT FOR CLEAN UP
+//        System.out.println("Player One (Size " + player1deck.size() + " ) " + player1deck); // TAKEN OUT FOR CLEAN UP
+//        System.out.println("Player Two (Size " + player1deck.size() + " ) " + player2deck); // TAKEN OUT FOR CLEAN UP
+//        System.out.println(); // TAKEN OUT FOR CLEAN UP
 
         //CHECKING THE MAIN STACK
-        System.out.println("\n Printing Deck again...");
-        mainDeck.printStack();
-        System.out.println("Size of Main Deck " + mainDeck.getSize());
+//        System.out.println("\n Printing Deck again..."); // TAKEN OUT FOR CLEAN UP
+//        mainDeck.printStack(); // TAKEN OUT FOR CLEAN UP
+//        System.out.println("Size of Main Deck " + mainDeck.getSize()); // TAKEN OUT FOR CLEAN UP
 
         //START OF GAME
         //SPLIT DECKS
@@ -70,44 +66,35 @@ public class GameLoop {
         Stack<String> player2discard = new Stack<>();
 
         while (!gamesLoop(player1deck, player2deck, player1discard, player2discard, CardMap, mainDeck)) {
-            if (player1deck.isEmpty()) {
+            if (player1deck.isEmpty()) { // checks if players decks are empty and shuffles them
                 System.out.println("shuffling discard d1");
                 mainDeck.shuffleDeck(player1discard);
                 while(!player1discard.isEmpty()) {
                     player1deck.push(player1discard.pop());
                 }
             }
-            if (player2deck.isEmpty()) {
+            if (player2deck.isEmpty()) { // checks if players decks are empty and shuffles them
                 System.out.println("shuffling discard d2");
                 mainDeck.shuffleDeck(player2discard);
                 while(!player2discard.isEmpty()) {
                     player2deck.push(player2discard.pop());
                 }
             }
-            System.out.println(player1deck.size() + player2deck.size() + player1discard.size() + player2discard.size() + "should always be 52"); // for debugging
 
-            // TODO- if misspelled flip will run the game loop twice when spelling it correctly
-
-            System.out.println("Enter \"Flip\" to play a card for the round");
+            System.out.println("Enter \"Flip\" to play a card for the round"); // asks for user input and collects it
             String userInput = scnr.next();
-            if (userInput.equalsIgnoreCase("Flip")) {
-                continue;
-            } else {
-                while (!userInput.equalsIgnoreCase("Flip")) {
-                    if (userInput.equalsIgnoreCase("Quite")) {
+                while (!userInput.equalsIgnoreCase("Flip")) { // runs loop while user input isn't flip
+                    if (userInput.equalsIgnoreCase("Quite")) { // break out of while loop if player types quite
+                        break;
+                    }
+                    System.out.println("Please enter \"Flip\" to play the next round or enter \"Quite\" to end game.");
+                    userInput = scnr.next(); // asks user to try again
+                }
+
+                if (userInput.equalsIgnoreCase("Quite")) { // if user wants to quite this will end program
+                    System.out.println("Game over...");
                     break;
                 }
-                    System.out.println("Please enter \"Flip\" to play the next round or enter \"Quite\" to end game.");
-                    userInput = scnr.next();
-                }
-            }
-
-            if (userInput.equalsIgnoreCase("Flip")) {
-                gamesLoop(player1deck, player2deck, player1discard, player2discard, CardMap, mainDeck);
-            } else {
-                System.out.println("Game over...");
-                break;
-            }
         }
     }
 
@@ -134,7 +121,7 @@ public class GameLoop {
                 player1discard.push(P1card); // puts both cards from the round into the winning players
                 player1discard.push(P2card); // discard stack for later
 
-                System.out.println(player1discard); //to make sure that cards entering discard
+                //System.out.println(player1discard); // (TESTING) to make sure that cards entering discard
 
             } else if (flipP1 < flipP2) { // checks if player 2's card is greater
                 System.out.println("Player 2 wins this round!"); // prints round info
@@ -143,7 +130,7 @@ public class GameLoop {
                 player2discard.push(P1card); // puts both cards from the round into the winning players
                 player2discard.push(P2card); // discard stack for later
 
-                System.out.println(player2discard); //to make sure that cards entering discard
+                //System.out.println(player2discard); // (TESTING) to make sure that cards entering discard
             } else { // this means that the cards were the same value
                 ArrayList <String> a = new ArrayList<>(); // initialize arraylist
                 a.add(P1card); //input current tied cards
