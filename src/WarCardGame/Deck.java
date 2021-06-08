@@ -29,23 +29,7 @@ public class Deck {
     }
 
     public void shuffle() {
-        ArrayList<String> a = new ArrayList<>();
-        Random rand = new Random();
-        rand.nextInt();
-        while(!deckStack.isEmpty()) { // fills array list with the values in the stack passed to it
-            a.add(deckStack.pop());
-        }
-        int length = a.size(); // collects size of ArrayList
-        for (int i = 0; i < length; i++) {
-            int change = i + rand.nextInt(length - i); // gets a random value in arrayList
-            swap(a, i, change);
-        }
-
-        for (int i = 0; i < length; i++) { // fills deck stack up with the now shuffled values
-            deckStack.push(a.get(i)); // since it is non primitive we shouldn't have to return value
-            // for deck stack passed in to be shuffled in game loop further testing required.
-        }
-        System.out.println(deckStack.size());
+        shuffleDeck(deckStack);
     }
 
     public void splitDeck(Stack<String> playerOne, Stack<String> playerTwo) {
