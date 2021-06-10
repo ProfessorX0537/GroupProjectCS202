@@ -2,8 +2,6 @@ package WarCardGame;
 
 import com.sun.security.jgss.GSSUtil;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class GameLoop {
@@ -14,6 +12,13 @@ public class GameLoop {
             /* PURPOSE:
                 * USED TO COMPARE EACH CARD OF EACH PLAYER
             */
+    //CREATING STACKS FOR PLAYERS-- PURPOSE: TO STORE THEIR CARDS
+    private static Stack<String> player1deck = new Stack<>();
+    private static Stack<String> player2deck = new Stack<>();
+    //CREATING STACKS FOR PLAYERS-- PURPOSE: TO STORE EACH PLAYER'S DISCARDED CARDS EACH ROUND
+    private static Stack<String> player1discard = new Stack<>();
+    private static Stack<String> player2discard = new Stack<>();
+
 //***-------------------------------------------------------------------------------------------------------------------------------------------***//
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
@@ -34,13 +39,6 @@ public class GameLoop {
             }
             i++;
         }
-    //-------------------------------------------------------------------------------------------------------------------------------------------//
-                            //CREATING STACKS FOR PLAYERS-- PURPOSE: TO STORE THEIR CARDS
-        Stack<String> player1deck = new Stack<>();
-        Stack<String> player2deck = new Stack<>();
-                            //CREATING STACKS FOR PLAYERS-- PURPOSE: TO STORE EACH PLAYER'S DISCARDED CARDS EACH ROUND
-        Stack<String> player1discard = new Stack<>();
-        Stack<String> player2discard = new Stack<>();
 
     //-------------------------------------------------------------------------------------------------------------------------------------------//
                                         //CREATING DECK CLASS
@@ -59,7 +57,8 @@ public class GameLoop {
 
     //-------------------------------------------------------------------------------------------------------------------------------------------//
                                         //GAME START UP
-                            System.out.println("GAME STARTING...");  //CONSOLE NOTIFIER
+                            System.out.println("GAME STARTING...\n\n" +
+                                    "PLEASE READ THE FOLLOWING INSTRUCTIONS CAREFULLY, THE GAME WILL ASK YOU TO START THE GAME SHORTLY.\n");  //CONSOLE NOTIFIER
         //WAIT TIME (SOLELY FOR STYLE)
         try {
             Thread.sleep(1000);
@@ -68,10 +67,7 @@ public class GameLoop {
         }
 
         //NOTIFY THE PLAYER HOW TO PLAY THE GAME
-        System.out.println("\t\t\t\t\t\t\t\tHOW TO PLAY WAR GAME: \n" +
-                "YOU HAVE TWO CHOICES: \"FLIP\" OR \"QUITE\"\n" +
-                "\tENTER \"FLIP\" TO PLAY THE NEXT ROUND\n" +
-                "\tENTER \"QUITE\" TO END THE GAME\n\n" +
+        System.out.println("\t\t\t\t\t\t\tHOW TO PLAY WAR GAME: \n" +
                 "THERE ARE TWO PLAYERS, EACH PLAYER HAS A DECK OF CARDS CONTAINING 26 CARDS.\n" +
                 "EACH ROUND THE FIRST CARD ON TOP OF THEIR DECKS ARE COMPARED.\n" +
                 "THE PLAYER THAT HAS A CARD WITH A HIGHER VALUE WINS THE ROUND,\n" +
@@ -80,11 +76,16 @@ public class GameLoop {
                 "THEY PULL IS COMPARED, AND WHOEVER HAS THE CARD WITH A HIGHER \n" +
                 "VALUE WINS, AND OBTAIN THE LOSING PLAYER'S CARDS (4 CARDS IN TOTAL.\n" +
                 "THE FIRST CARD, AND THE LAST THREE CARDS PULLED)\n" +
-                "THE GAME ENDS WHEN ONE PLAYER HAS NO MORE CARDS TO PLAY.\n");
+                "THE GAME ENDS WHEN ONE PLAYER HAS NO MORE CARDS TO PLAY.\n\n" +
+                "YOU HAVE TWO CHOICES OF INPUT: \"FLIP\" OR \"QUITE\"\n" +
+                "\t1. ENTER \"FLIP\" TO PLAY THE NEXT ROUND\n" +
+                "\t2. ENTER \"QUITE\" TO END THE GAME\n\n");
 
         //WAIT TIME (SOLELY FOR STYLE)
         try {
             Thread.sleep(10000);
+            System.out.println("\t\t\t\t\t\t\t\tPRESS ENTER TO START"); //
+            String tempInput = scnr.nextLine();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -108,24 +109,32 @@ public class GameLoop {
 
         //WAIT TIME (SOLELY FOR STYLE)
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------//
                                         //STARTING GAME LOOP
-        while (!gamesLoop(player1deck, player2deck, player1discard, player2discard, mainDeck)) {
+        while (!gamesLoop(mainDeck)) {
             //CHECKS IF EACH PLAYERS DECKS ARE EMPTY, SHUFFLES THEM, AND ADD THEM TO THEIR CURRENT STACK/DECK
             if (player1deck.isEmpty()) {
-                System.out.println("SHUFFLING DISCARD DECK FOR PLAYER 1");
+                System.out.println("------------------------------------------------\n" +
+                        "SYSTEM NOTICE: PLAYER 1 HAS RUN OUT OF CARDS\n" +
+                        "SHUFFLED DISCARD DECK FOR PLAYER 1...\n" +
+                        "ADDING CARDS IN DISCARD TO MAIN DECK\n" +
+                        "------------------------------------------------\n\n");
                 mainDeck.shuffleDeck(player1discard);
                 while(!player1discard.isEmpty()) {
                     player1deck.push(player1discard.pop());
                 }
             }
             if (player2deck.isEmpty()) {
-                System.out.println("SHUFFLING DISCARD DECK FOR PLAYER 2");
+                System.out.println("------------------------------------------------\n" +
+                        "SYSTEM NOTICE: PLAYER 2 HAS RUN OUT OF CARDS\n" +
+                        "SHUFFLED DISCARD DECK FOR PLAYER 2...\n" +
+                        "ADDING CARDS IN DISCARD TO MAIN DECK\n" +
+                        "------------------------------------------------\n\n");
                 mainDeck.shuffleDeck(player2discard);
                 while(!player2discard.isEmpty()) {
                     player2deck.push(player2discard.pop());
@@ -141,18 +150,23 @@ public class GameLoop {
 
 
             //IF THE PLAYER'S INPUT IS NOT Flip OR Quite ASK FOR A DIFFERENT INPUT-- NOT CASE SENSTIVE
-            while (!userInput.equalsIgnoreCase("Flip")) { // runs loop while user input isn't flip
+            while (!userInput.equalsIgnoreCase("Flip") && !userInput.equalsIgnoreCase("Quite")) { // runs loop while user input isn't flip
                 if (userInput.equalsIgnoreCase("Quite")) { // break out of while loop if player types quite
+                    System.out.println("A PLAYER HAS REQUESTED TO END THE GAME: GAME ENDED");
+                    System.out.println("PLAYER 1 HAD: " + (player1deck.size() + player1discard.size()) + " CARDS LEFT.");
+                    System.out.println("PLAYER 2 HAD: " + (player2deck.size() + player2discard.size()) + " CARDS LEFT.\n\n\n\n");
                     break;
                 }
-                System.out.println("WRONG INPUT\nPlease enter \"Flip\" to play the next round or enter \"Quite\" to end game.");
+                System.out.println("NOTICE: WRONG INPUT\nPLEASE ENTER \"Flip\" TO PLAY THE NEXT ROUND OR ENTER  \"Quite\" TO END THE GAME.");
                 userInput = scnr.next(); // asks user to try again
-                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
             }
 
             //IF INPUT IS QUITE IT ENDS THE GAME, IF NOT, CONTINUES LOOPING
             if (userInput.equalsIgnoreCase("Quite")) { // if user wants to quite this will end program
-                System.out.println("Game over...");
+                System.out.println("A PLAYER HAS REQUESTED TO END THE GAME: GAME ENDED");
+                System.out.println("PLAYER 1 HAD: " + (player1deck.size() + player1discard.size()) + " CARDS LEFT.");
+                System.out.println("PLAYER 2 HAD: " + (player2deck.size() + player2discard.size()) + " CARDS LEFT.\n\n\n\n");
                 break;
             }
         }
@@ -164,14 +178,17 @@ public class GameLoop {
                     * RETURN TRUE IF DETECTS A WINNER AND ENDS GAME
                     * ...
             */
-    public static boolean gamesLoop(Stack<String> player1deck, Stack<String> player2deck, Stack<String> player1discard,
-                                    Stack<String> player2discard, Deck mainDeck) {
+    public static boolean gamesLoop(Deck mainDeck) {
         if (player2deck.isEmpty()) { // checks to see if the player has won
-            System.out.println("Player 1 has won the game, they have acquired all 52 cards");
+            System.out.println("Player 1 has won the game, they have acquired all 52 cards\n");
+            System.out.println("PLAYER 1 HAS: " + (player1deck.size() + player1discard.size()) + " CARDS LEFT.");
+            System.out.println("PLAYER 2 HAS: " + (player2deck.size() + player2discard.size()) + " CARDS LEFT.\n\n\n\n");
             return true; // wins game
         }
         if (player1deck.isEmpty()) { // checks to see if the player has won
-            System.out.println("Player 2 has won the game, they have acquired all 52 cards");
+            System.out.println("Player 2 has won the game, they have acquired all 52 cards\n");
+            System.out.println("PLAYER 1 HAS: " + (player1deck.size() + player1discard.size()) + " CARDS LEFT.");
+            System.out.println("PLAYER 2 HAS: " + (player2deck.size() + player2discard.size()) + " CARDS LEFT.\n\n\n\n");
             return true; // wins game
         }
 
@@ -210,53 +227,82 @@ public class GameLoop {
 
             //System.out.println(player2discard); // (TESTING) to make sure that cards entering discard
         } else { // this means that the cards were the same value
+            //CHECK WHICH PLAYER WON OR IF IT IS ANOTHER TIE
             ArrayList <String> a = new ArrayList<>(); // initialize arraylist
             a.add(P1card); //input current tied cards
             a.add(P2card);
-
-            if (player1deck.size() < 3) { // has to have at least 3 cards to perform tie operation.
-                //System.out.println("SHUFFLING DISCARD DECK FOR PLAYER 1");
-                mainDeck.shuffleDeck(player1discard);
-                while(!player1discard.isEmpty()) {
-                    player1deck.push(player1discard.pop());
-                }
-                if (player1deck.size() + player1discard.size() < 3) { //SPECIAL CASE WHEN PLAYER 1 HAS LESS THAN 3 CARDS TOTAL
-                    System.out.println("Player 2 Wins");
-                    return true;
-                }
-            }
-            if (player2deck.size() < 3) { // has to have at least 3 cards to perform tie operation.
-                //System.out.println("SHUFFLING DISCARD DECK FOR PLAYER 2");
-                mainDeck.shuffleDeck(player2discard);
-                while(!player2discard.isEmpty()) {
-                    player2deck.push(player2discard.pop());
-                }
-                if (player2deck.size() + player2discard.size() < 3) { //SPECIAL CASE WHEN PLAYER 2 HAS LESS THAN 3 CARDS TOTAL
-                    System.out.println("Player 1 Wins");
-                    return true;
-                }
-
-            }
-
-            for (int i = 0; i < 3; i++) { // flips three cards from each deck into Array
-                a.add(player1deck.pop());
-                a.add(player2deck.pop());
-            }
-
-            if (CardMap.get(a.get(a.size() - 1)) > CardMap.get(a.get(a.size() - 2))) { // if P2 card is greater than P1
-                for (int i = 0; i < a.size(); i++) {
-                    player2discard.push(a.get(i));
-                }
-            } else { // player one wins tie
-                for (int i = 0; i < a.size(); i++) {
-                    player1discard.push(a.get(i));
-                }
-            }
+            return ladiesAndGentlemenWegotHim(a, mainDeck);
         }
         return false;
     }
+    //***-------------------------------------------------------------------------------------------------------------------------------------------***//
+
+    public static boolean ladiesAndGentlemenWegotHim(ArrayList<String> a, Deck mainDeck) {
+        System.out.println("RESULT: THERE WAS A TIE!\n" +
+                "NOTICE: EACH PLAYER DRAWS THREE CARDS\n");
+
+
+        //CHECK IF EITHER PLAYER HAS ENOUGH CARDS OR NAH
+        if (player1deck.size() < 3) { // has to have at least 3 cards to perform tie operation.
+            //System.out.println("SHUFFLING DISCARD DECK FOR PLAYER 1");
+            mainDeck.shuffleDeck(player1discard);
+            while(!player1discard.isEmpty()) {
+                player1deck.push(player1discard.pop());
+            }
+            if (player1deck.size() + player1discard.size() < 3) { //SPECIAL CASE WHEN PLAYER 1 HAS LESS THAN 3 CARDS TOTAL
+                System.out.println("PLAYER 1 HAS LESS THAN 3 CARDS TO DRAW : PLAYER 2 HAS WON THE GAME\n" +
+                        "\t\t\t\t\t\t\t\tTHE GAME HAS ENDED\n");
+                System.out.println("PLAYER 1 HAD: " + (player1deck.size() + player1discard.size()) + " CARDS LEFT.");
+                System.out.println("PLAYER 2 HAD: " + (player2deck.size() + player2discard.size()) + " CARDS LEFT.\n\n\n\n");
+                System.out.println("===========================================================================================\n\n");
+                return true;
+            }
+        }
+        if (player2deck.size() < 3) { // has to have at least 3 cards to perform tie operation.
+            //System.out.println("SHUFFLING DISCARD DECK FOR PLAYER 2");
+            mainDeck.shuffleDeck(player2discard);
+            while(!player2discard.isEmpty()) {
+                player2deck.push(player2discard.pop());
+            }
+            if (player2deck.size() + player2discard.size() < 3) { //SPECIAL CASE WHEN PLAYER 2 HAS LESS THAN 3 CARDS TOTAL
+                System.out.println("PLAYER 2 HAS LESS THAN 3 CARDS TO DRAW : PLAYER 1 HAS WON THE GAME\n" +
+                        "\t\t\t\t\t\t\t\tTHE GAME HAS ENDED\n");
+                System.out.println("PLAYER 1 HAD: " + (player1deck.size() + player1discard.size()) + " CARDS LEFT.");
+                System.out.println("PLAYER 2 HAD: " + (player2deck.size() + player2discard.size()) + " CARDS LEFT.\n\n\n\n");
+                System.out.println("===========================================================================================\n\n");
+                return true;
+            }
+
+        }
+
+        System.out.println("\t\t\t\t\t\t\t\tTHE NEW CARDS ARE:\n");
+        for (int i = 0; i < 3; i++) { // flips three cards from each deck into Array
+            a.add(player1deck.pop());
+            a.add(player2deck.pop());
+        }
+        System.out.println("Player 1's Card is the " + (a.get(a.size() - 2)) + "\t: \tPlayer 2's Card is the " + (a.get(a.size() - 1)) + "\n");
+
+
+        if (CardMap.get(a.get(a.size() - 1)) > CardMap.get(a.get(a.size() - 2))) { // if P2 card is greater than P1
+            for (int i = 0; i < a.size(); i++) {
+                player2discard.push(a.get(i));
+            }
+            System.out.println("\t\t\t\t\t\t\t\tPLAYER TWO WON THE TIE");
+            System.out.println("===========================================================================================\n\n");
+        } else if (CardMap.get(a.get(a.size() - 2)) > CardMap.get(a.get(a.size() - 1))) { // player one wins tie
+            for (int i = 0; i < a.size(); i++) {
+                player1discard.push(a.get(i));
+            }
+            System.out.println("\t\t\t\t\t\t\t\tPLAYER ONE WON THE TIE");
+            System.out.println("===========================================================================================\n\n");
+        } else { //if it is another tie
+            ladiesAndGentlemenWegotHim(a, mainDeck); //recurse if it is the same value
+        }
+        return false;
+    }
+
 }
-/*
+/*  TEST INPUTS
 flip
 flip
 flip
